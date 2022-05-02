@@ -56,9 +56,17 @@ useEffect(() => {
   const prepareOptions=(allData, QuestionOnDisplay)=>{
     let threeOptions = getMultipleRandom(allData,3)
     threeOptions.push(QuestionOnDisplay)
-    setFinalPossibleAnswers(threeOptions)
+    shuffle(threeOptions)
+    setFinalPossibleAnswers(shuffle(threeOptions))
     console.log("new day", threeOptions)
   }
+
+  const shuffle = (array) => {
+    return array.slice().sort(() => Math.random() - 0.5);
+  }
+        
+//console.log(shuffle([1,2,3,4,5,6,7,8,9,10]));
+// Output: [4, 3, 8, 10, 1, 7, 9, 2, 6, 5]
 
 
 
