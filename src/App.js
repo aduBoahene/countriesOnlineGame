@@ -1,13 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [question, setQuestion]= useState()
+  
   const [country, setCountry] = useState(null)
   const [finalPossibleAnswers, setFinalPossibleAnswers] = useState([])
-  const [isCorrectAnswer, setIsCorrectAnswer] = useState("")
 
   const [allCountries, setAllCountries] = useState()
 
@@ -35,7 +33,7 @@ useEffect(() => {
   }
 
   const handleAnswerClick=(option)=>{
-    if(option == country.capital[0]){
+    if(option === country.capital[0]){
       alert("correct answer")
       let randomNumber = Math.floor(Math.random() * 250) + 1
       prepareQuestion(allCountries, allCountries[randomNumber])
@@ -68,7 +66,7 @@ useEffect(() => {
     <div className="grid place-items-center h-screen">
       <div className="m-4">
         <h3 className="text-center">What is the capital town of {country?.name?.common?(country?.name?.common):(<p>loading</p>)}</h3>
-        <img src={country?.flags?.svg} />
+        <img src={country?.flags?.svg} alt="country flag"/>
       </div>
 
 
