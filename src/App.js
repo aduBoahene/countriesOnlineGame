@@ -6,8 +6,12 @@ function App() {
   
   const [country, setCountry] = useState(null)
   const [finalPossibleAnswers, setFinalPossibleAnswers] = useState([])
-
   const [allCountries, setAllCountries] = useState()
+  const [totalAttempts, setTotalAttempts] = useState(0)
+  const [correctAnser, setCorrectAnser] = useState(0)
+
+  const [showWrong, setShowWrong] = useState(false)
+  const [showCorrect, setShowCorrect] = useState(false)
 
 
 
@@ -34,15 +38,18 @@ useEffect(() => {
 
   const handleAnswerClick=(option)=>{
     if(option === country.capital[0]){
-      alert("correct answer")
       let randomNumber = Math.floor(Math.random() * 250) + 1
       prepareQuestion(allCountries, allCountries[randomNumber])
       prepareOptions(allCountries,  allCountries[randomNumber])
+      setTotalAttempts(parseInt(totalAttempts) + 1)
+      setCorrectAnser(parseInt(correctAnser) + 1)
+      setShowCorrect(true)
     }else{
-      alert("wrong answer")
       let randomNumber = Math.floor(Math.random() * 250) + 1
       prepareQuestion(allCountries, allCountries[randomNumber])
       prepareOptions(allCountries,  allCountries[randomNumber])
+      setTotalAttempts(totalAttempts + 1)
+      setShowWrong(true)
     }
 
   }
@@ -50,6 +57,8 @@ useEffect(() => {
   const prepareQuestion=(allData, question)=>{
       setAllCountries(allData)
       setCountry(question);
+      setShowWrong(false)
+      setShowCorrect(false)
   }
 
 
@@ -64,28 +73,32 @@ useEffect(() => {
   const shuffle = (array) => {
     return array.slice().sort(() => Math.random() - 0.5);
   }
-        
-//console.log(shuffle([1,2,3,4,5,6,7,8,9,10]));
-// Output: [4, 3, 8, 10, 1, 7, 9, 2, 6, 5]
-
-
 
   return (
-    <div className="grid place-items-center h-screen">
-      <div className="m-4">
-        <h3 className="text-center">What is the capital town of {country?.name?.common?(country?.name?.common):(<p>loading</p>)}</h3>
-        <img src={country?.flags?.svg} alt="country flag"/>
+    <div className="w-4/5 mx-auto">
+        <div className="text-center mt-4 flex justify-between">
+          {showWrong?(<span className="text-red-800">&#x02717;</span>):("")}
+          {`${correctAnser} / ${totalAttempts}`}
+          {showCorrect?(<span className="text-green-800">&#x02713;</span>):("")}
+          
+          </div>
+        <div className="mt-8 mx-auto w-4/5">
+          <h3 className="mb-2 text-center">What is the capital town of {country?.name?.common?(<span className="font-extrabold">{country?.name?.common}</span>):(<p>loading</p>)}</h3>
+          {country?.flags?.svg?(<img src={country?.flags?.svg} alt="country flag"/>):(<p>loading</p>)}
+        </div>
+
+
+      <div className="mt-8">
+      {finalPossibleAnswers.map(a=>
+        <div className="border-solid border-2 border-indigo-600 w-3/4 mx-auto text-center py-2 mb-4" 
+              key={a?.name?.common} 
+              onClick={()=> handleAnswerClick(a?.capital[0])}>
+            {a?.capital[0]} 
+        </div>
+      )}
       </div>
-
-
-  {finalPossibleAnswers.map(a=>
-    
-    <p className={``} key={a?.name?.common} onClick={()=> handleAnswerClick(a?.capital[0])}>
-          {a?.capital[0]}
-    </p>
-  )}
-
-      </div>
+      
+    </div>
      
 
    
